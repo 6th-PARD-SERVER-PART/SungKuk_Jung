@@ -1,5 +1,6 @@
 package com.pard.server.hw5_sungkukjung.user;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -8,6 +9,8 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -15,6 +18,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
     private final UserRepository userRepository;
 
     @Override
+    @Transactional
     public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws OAuth2AuthenticationException{
         log.info("구글에서 받아온 UserRequset: " + oAuth2UserRequest);
         OAuth2User oAuth2User = super.loadUser(oAuth2UserRequest);
@@ -25,14 +29,23 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         String socialId = (String) oAuth2User.getAttributes().get("sub");
 
         userRepository.findByEmail(email).orElseGet(
-                ()->userRepository.save(
-                        User.builder()
-                                .email(email)
-                                .name(name)
-                                .socialID(socialId)
-                                .role(Role.USER)
-                                .build()
-                )
+                ()->{
+                    String tempUsername = "google_" + socialId;
+                    String dummyPassword = UUID.randomUUID().toString();
+
+                    log.info("새로운 구글 유저 생성: Email=" + email + ", Username=" + tempUsername + ", DummyPasswordGenerated"); // Added logging
+
+                    return userRepository.save(
+                            User.builder()
+                                    .email(email)
+                                    .name(name)
+                                    .socialID(socialId)
+                                    .role(Role.USER)
+                                    .username(tempUsername) // Required by User entity
+                                    .password(dummyPassword) // Required by User entity
+                                    .build()
+                    );
+                }
         );
 
         return oAuth2User;
