@@ -4,7 +4,7 @@
 
 HW5는 Spring Security를 활용한 Google OAuth 2.0 소셜 로그인 기능이 통합된 Spring Boot REST API 프로젝트입니다.
 
-## 🚀 주요 변경 사항 (HW4 대비)
+## 주요 변경 사항 (HW4 대비)
 
 ### 1. Spring Security 및 OAuth 의존성 추가
 
@@ -145,7 +145,7 @@ spring:
 
 ---
 
-## 📚 참고 자료
+## 참고 자료
 
 - [Spring Security OAuth 2.0 공식 문서](https://spring.io/guides/tutorials/spring-boot-oauth2)
 - [Google OAuth 2.0 가이드](https://developers.google.com/identity/protocols/oauth2)
