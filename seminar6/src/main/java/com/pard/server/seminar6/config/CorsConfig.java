@@ -6,8 +6,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
-import java.util.List;
-
 @Configuration
 public class CorsConfig {
     @Bean
@@ -20,14 +18,15 @@ public class CorsConfig {
 
         config.setAllowCredentials(true); // 쿠키허용
 
-        config.addAllowedOrigin("http://172.17.195.15:3000"); // 모든 도메인 허용
-        config.setAllowedOrigins(List.of("*"));
+        config.addAllowedOrigin("http://localhost:3000/"); // 모든 도메인 허용
+
         config.addAllowedHeader("*"); // 모든 http header 허용
 
         config.addAllowedMethod("*"); // 모든 http method 허용
 
-        source.registerCorsConfiguration("/*", config);
+        source.registerCorsConfiguration("/**", config);
 
         return new CorsFilter(source);
     }
 }
+

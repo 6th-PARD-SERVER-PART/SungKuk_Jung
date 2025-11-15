@@ -43,12 +43,15 @@ public class ProductService {
 
     // 상품 색갈별 수량 변결
     @Transactional
-    public Long updateByColor(Long id, ProductRequest.ProductQuantityChange productUpdateRequest) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException(("검색한 ID로 상품 존재하지 않습니다: " + id)));
-        product.updateQuantity(productUpdateRequest);
-        productRepository.save(product);
-        return product.getId();
+    public List<Long> updateByColor(String color, ProductRequest.ProductQuantityChange productUpdateRequest) {
+        List<Product> products = productRepository.findAllByColor(color);
+        if (products.isEmpty()) {
+            throw new RuntimeException("검색한 색상이 존재하지 않습니다: " + color);
+        }
+        for (Product p : products) {
+            p.updateQuantity(productUpdateRequest);
+        }
+        return products.stream().map(Product::getId).toList();
     }
 
     // 상품 상세 정보

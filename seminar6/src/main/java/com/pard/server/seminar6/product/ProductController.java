@@ -23,9 +23,9 @@ public class ProductController {
         return productService.save(product);
     }
 
-    @PatchMapping("/{id}")
-    public Long updateByColor(@PathVariable Long id, @RequestBody ProductRequest.ProductQuantityChange productUpdateRequest) {
-        return productService.updateByColor(id, productUpdateRequest);
+    @PatchMapping("/{color}")
+    public List<Long> updateByColor(@PathVariable String color, @RequestBody ProductRequest.ProductQuantityChange productUpdateRequest) {
+        return productService.updateByColor(color, productUpdateRequest);
     }
 
     @GetMapping("/{id}")

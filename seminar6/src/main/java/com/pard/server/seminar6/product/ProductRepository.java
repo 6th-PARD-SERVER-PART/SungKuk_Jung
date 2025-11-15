@@ -9,5 +9,4 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findAllByOrderByIdDesc();
     Optional<Product> findByColor(String color);
     List<Product> findAllByColor(String color);
-
 }
